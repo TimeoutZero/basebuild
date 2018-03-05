@@ -19,13 +19,13 @@ module.exports = function() {
   }
 
   function runTests (argument) {
-    return gulp.src('./spec/**/*.js', {read: false})
+    return gulp.src('./src/spec/**/*.js', {read: false})
       .pipe(mocha({reporter: 'nyan'})).on('error', errorHandler('Mocha')) // gulp-mocha needs filepaths so you can't have any plugins before it
       .pipe(istanbul.writeReports());
   }
 
   function setupCoverage () {
-    return gulp.src('./src/**/*.js')
+    return gulp.src(['./src/**/*.js', '!./src/**/*.spec.js'])
       .pipe(istanbul())
       .pipe(istanbul.hookRequire()).on('error', errorHandler('Coverage'));
   }
