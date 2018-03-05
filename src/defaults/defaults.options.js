@@ -9,6 +9,8 @@ var nodePlugins = require('gulp-load-plugins')({
 });
 
 var _ = nodePlugins.lodash;
+const path = require('path'),
+  defaultsDeep = require('../merger.js').defaultsDeep;
 
 
 module.exports = function(){
@@ -51,6 +53,26 @@ module.exports = function(){
     trace: false
   };
 
+  /**
+   * Basebuild works with modules.
+   * There's a module for each feature,
+    Built-in modules: {
+      utils     : {}
+      build     : {}
+      proxy     : {}
+      dev       : {}
+      unitTests : {}
+      watch     : {}
+    }
+   */
+  defaultOptions.modules = {
+
+    unitTests: {
+      defaultValue: path.resolve('../unit-tests/unit-tests.task.js'),
+      mochaOptions: '--ui "bdd" --colors true',
+      settings: require('../unit-tests/unit-tests.options.js').generateOptions()
+    }
+  };
 
   return defaultOptions;
 
