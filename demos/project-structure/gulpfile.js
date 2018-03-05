@@ -25,7 +25,7 @@ var options = {
   Env
   ==========================
 */
-var basebuildMainFile = '../src/main.js';
+var basebuildMainFile = '../../src/main.js';
 if(gutil.env.prod){
   options.modulesData.gulp.uses  = 'gulp';
   options.modulesData.karma.uses = 'karma';
