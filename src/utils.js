@@ -4,7 +4,8 @@ var nodePlugins = require('gulp-load-plugins')({
   pattern: [
     '*',
     '!gulp',
-    '!protractor'
+    '!protractor',
+    '!mocha'
   ]
 });
 

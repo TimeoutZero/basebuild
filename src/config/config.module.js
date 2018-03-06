@@ -4,11 +4,12 @@
 /**
  * Imports
  */
-const bbDefaults     = require('./defaults/defaults.options')(),
+const rootPath       = '..';
+const bbDefaults     = require(`${rootPath}/defaults/defaults.options`)(),
       chalk          = require('chalk'),
       _              = require('lodash'),
-      MigrateModule  = require('./migrate.js'),
-      defaultsDeep   = require('./merger.js').defaultsDeep;
+      MigrateModule  = require(`${rootPath}/migrate.js`),
+      defaultsDeep   = require(`${rootPath}/merger.js`).defaultsDeep;
 
 
 

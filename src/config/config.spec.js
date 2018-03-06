@@ -6,14 +6,14 @@ describe('Config Module', function(){
      * Global Variables
     */
     let rootPath      = "..";
-    let srcPath       = `${rootPath}`;
+    let srcPath       = `./`;
     // let bbNodeModules = "#{rootPath}/node_modules";
 
     /*
      * Imports
     */
-    let defaultOptions = require(`${srcPath}/defaults/defaults.options`)();
-    let ConfigModule   = require(`${srcPath}/config.js`);
+    let defaultOptions = require(`${rootPath}/defaults/defaults.options`)();
+    let ConfigModule   = require(`${srcPath}/config.module.js`);
     const _            = require('lodash');
 
     const sinon  = require('sinon');

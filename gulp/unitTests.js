@@ -4,6 +4,7 @@
 var gulp      = require('gulp');
 var mocha     = require('gulp-mocha');
 var istanbul  = require('gulp-istanbul');
+var path      = require('path');
 
 
 /**
@@ -19,7 +20,7 @@ module.exports = function() {
   }
 
   function runTests (argument) {
-    return gulp.src('./src/spec/**/*.js', {read: false})
+    return gulp.src('src/**/*.spec.js', {read: false})
       .pipe(mocha({reporter: 'nyan'})).on('error', errorHandler('Mocha')) // gulp-mocha needs filepaths so you can't have any plugins before it
       .pipe(istanbul.writeReports());
   }
@@ -37,6 +38,15 @@ module.exports = function() {
   gulp.task('test'          , ['setup-coverage']                       , runTests);
   gulp.task('test:auto'     , ['watchTests', 'test', 'setup-coverage'] , function(){
     return gulp.watch(['../src/**/*.js', '../src/**/*.spec.js'], runTests);
+  });
+
+  // Run all unit tests in debug mode
+  gulp.task('test-debug', function () {
+    var spawn = require('child_process').spawn;
+    spawn(path.resolve('node_modules/mocha/bin/_mocha'), [
+      'src/**/*.spec.js',
+      '--debug-brk'
+    ], { stdio: 'inherit' });
   });
 
 }

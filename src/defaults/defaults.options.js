@@ -4,7 +4,8 @@ var nodePlugins = require('gulp-load-plugins')({
   pattern: [
     '*',
     '!gulp',
-    '!protractor'
+    '!protractor',
+    '!mocha'
   ]
 });
 
@@ -20,7 +21,9 @@ module.exports = function(){
     Basic Options
     ==========================
   */
-  var defaultOptions = {}
+  var defaultOptions = {
+    src: 'src'
+  }
 
   /*
     ==========================
@@ -68,9 +71,13 @@ module.exports = function(){
   defaultOptions.modules = {
 
     unitTests: {
-      defaultValue: path.resolve('../unit-tests/unit-tests.task.js'),
+      defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
       mochaOptions: '--ui "bdd" --colors true',
-      settings: require('../unit-tests/unit-tests.options.js').generateOptions()
+      specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/,
+      settings: {
+        web: require('../unit-tests/unit-tests.options.js').generateOptions(),
+        node: ''
+      }
     }
   };
 
