@@ -1,0 +1,5 @@
+
+
+interface BasebuildModule {
+  settings: BasebuildModuleSettingsGenerator
+}

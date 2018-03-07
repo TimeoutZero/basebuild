@@ -22,8 +22,10 @@ module.exports = function(){
     ==========================
   */
   var defaultOptions = {
+
+    // Source folder, where source code is present.
     src: 'src'
-  }
+  };
 
   /*
     ==========================
@@ -74,12 +76,11 @@ module.exports = function(){
       defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
       mochaOptions: '--ui "bdd" --colors true',
       specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/,
-      settings: {
-        web: require('../unit-tests/unit-tests.options.js').generateOptions(),
-        node: ''
-      }
+      settings: require('../unit-tests/unit-tests.options.js').generateOptions()
     }
   };
+
+
 
   return defaultOptions;
 
