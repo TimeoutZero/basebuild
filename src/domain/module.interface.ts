@@ -1,5 +1,7 @@
 
 
+
 interface BasebuildModule {
-  settings: BasebuildModuleSettingsGenerator
+  buildSettings(): any // Webpack Object
+  registerTasks(gulp:Gulp): void;
 }
