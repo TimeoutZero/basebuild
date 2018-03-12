@@ -28,6 +28,29 @@ describe('Config Module', function(){
         date  : new Date()
       }
     };
+    const newModuleUsingClass = {
+      useClass: class NewModuleUsingClass {
+        buildSettings(){
+
+        }
+
+        registerTask(){
+
+        }
+      }
+    };
+
+    const newModuleUsingClass2 = {
+      useClass: class NewModuleUsingClass2 {
+        buildSettings(){
+
+        }
+
+        registerTask(){
+
+        }
+      }
+    }
 
 
     /*
@@ -38,25 +61,25 @@ describe('Config Module', function(){
 
 
       describe('which user options is empty and defaults is not', function () {
-        let instance = null;
+        let moduleInstance = null;
 
         beforeEach(function () {
-          instance = new ConfigModule({}, commonUserDefaults);
+          moduleInstance = new ConfigModule({}, commonUserDefaults);
         });
 
 
         it('Sets user options as empty object', function () {
-          assert.isObject(instance.userOptions);
-          assert.isTrue( _.isEmpty(instance.userOptions) );
+          assert.isObject(moduleInstance.userOptions);
+          assert.isTrue( _.isEmpty(moduleInstance.userOptions) );
         });
 
         it('Sets default options up by parameter', function () {
-          assert.isObject(instance.defaults);
-          assert.isFalse( _.isEmpty(instance.defaults) );
+          assert.isObject(moduleInstance.defaults);
+          assert.isFalse( _.isEmpty(moduleInstance.defaults) );
         });
 
         it('Sets merged options as empty object', function () {
-          assert.isObject(instance.finalOptions);
+          assert.isObject(moduleInstance.finalOptions);
         });
 
 
@@ -64,6 +87,33 @@ describe('Config Module', function(){
 
 
 
+    });
+
+    describe("When it setups the basebuild", function(){
+      describe("and user has added new modules", function(){
+        describe("using classes", function(){
+          let moduleInstance = null;
+
+          beforeEach(function () {
+
+            const userOptionsWithModulesUsingClasses = {
+              modules: {newModuleUsingClass, newModuleUsingClass2}
+            };
+            moduleInstance = new ConfigModule(userOptionsWithModulesUsingClasses, commonUserDefaults);
+            sinon.stub(moduleInstance.userOptions.modules.newModuleUsingClass.initializer, 'buildSettings');
+          });
+
+          afterEach(function(){
+            moduleInstance.userOptions.modules.newModuleUsingClass.initializer.buildSettings.restore();
+          });
+
+          it("runs the buildSettings method for every new module", function(){
+            assert.isTrue(moduleInstance.userOptions.modules.newModuleUsingClass.initializer.buildSettings.calledOnce);
+          });
+        })
+
+
+      })
     });
 
 

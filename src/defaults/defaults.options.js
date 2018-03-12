@@ -76,7 +76,7 @@ module.exports = function(){
       defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
       mochaOptions: '--ui "bdd" --colors true',
       specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/,
-      settings: require('../unit-tests/unit-tests.options.js').generateOptions()
+      settings: require('../unit-tests/unit-tests.initializer.js')
     }
   };
 

@@ -6,14 +6,9 @@ const path = require("path");
 const generalWebpackRules = require('../defaults/webpack.defaults').rules;
 
 /**
- * Module Export
- */
-module.exports = BasebuildUnitTestsModule;
-
-/**
  * Module class
  */
-class BasebuildUnitTestsModule {
+module.exports = class BasebuildUnitTestsInitializerModule {
 
   buildSettings(defaults) {
     return  {

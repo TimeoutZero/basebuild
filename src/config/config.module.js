@@ -37,9 +37,11 @@ class ConfigModule {
    * @param  {Object} userOptions user options
    * @return {Object} user options, merged with default options and analyzed by necessary files
    */
-   setup(userOptions) {
-    userOptions       = userOptions || this.userOptions;
-    this.finalOptions = this.mergeWithDefaultOptions(this.finalOptions);
+   setup(userOptions = this.userOptions) {
+    userOptions         = userOptions;
+    this.buildExternalModulesSettings();
+
+    this.finalOptions   = this.mergeWithDefaultOptions(this.finalOptions);
 
     // Set default options in global options to never require ./defaults.js more than once
     this.finalOptions.defaults = this.defaults;
@@ -57,6 +59,18 @@ class ConfigModule {
    */
   mergeWithDefaultOptions(options) {
     return defaultsDeep(options, this.defaults, bbDefaults);
+  }
+
+
+  buildExternalModulesSettings(modules = {}){
+    for(let key in modules){
+      let basebuildModule = modules[key];
+
+      if(basebuildModule.useClass){
+
+      }
+
+    }
   }
 
 }

@@ -1,7 +1,4 @@
 
-interface WebpackOptions {
-
-}
 
 interface Gulp {
   task(taskName:string, dependencies:Array<string>, handler: Function)
