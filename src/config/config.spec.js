@@ -29,7 +29,7 @@ describe('Config Module', function(){
       }
     };
     const newModuleUsingClass = {
-      useClass: class NewModuleUsingClass {
+      initializerClass: class NewModuleUsingClass {
         buildSettings(){
 
         }
@@ -41,7 +41,7 @@ describe('Config Module', function(){
     };
 
     const newModuleUsingClass2 = {
-      useClass: class NewModuleUsingClass2 {
+      initializerClass: class NewModuleUsingClass2 {
         buildSettings(){
 
         }
@@ -89,7 +89,7 @@ describe('Config Module', function(){
 
     });
 
-    describe("When it setups the basebuild", function(){
+    describe("When setups the basebuild", function(){
       describe("and user has added new modules", function(){
         describe("using classes", function(){
           let moduleInstance = null;
@@ -99,16 +99,18 @@ describe('Config Module', function(){
             const userOptionsWithModulesUsingClasses = {
               modules: {newModuleUsingClass, newModuleUsingClass2}
             };
+
             moduleInstance = new ConfigModule(userOptionsWithModulesUsingClasses, commonUserDefaults);
-            sinon.stub(moduleInstance.userOptions.modules.newModuleUsingClass.initializer, 'buildSettings');
+            moduleInstance.setup();
+            sinon.stub(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance, 'buildSettings');
           });
 
           afterEach(function(){
-            moduleInstance.userOptions.modules.newModuleUsingClass.initializer.buildSettings.restore();
+            moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.restore();
           });
 
           it("runs the buildSettings method for every new module", function(){
-            assert.isTrue(moduleInstance.userOptions.modules.newModuleUsingClass.initializer.buildSettings.calledOnce);
+            assert.isTrue(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.calledOnce);
           });
         })
 

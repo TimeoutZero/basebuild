@@ -64,9 +64,18 @@ class ConfigModule {
 
   buildExternalModulesSettings(modules = {}){
     for(let key in modules){
-      let basebuildModule = modules[key];
+      let basebuildModule  = modules[key];
 
-      if(basebuildModule.useClass){
+      // Initialing by a class
+      if(basebuildModule.initializerClass){
+        let initializerClass = basebuildModule.initializerClass;
+
+        if(_.isString(basebuildModule.initializerClass)){
+          initializerClass = require(basebuildModule.initializerClass);
+        }
+
+        basebuildModule.initializerInstance = new basebuildModule.initializerClass();
+        basebuildModule.settings = basebuildModule.initializerInstance.buildSettings();
 
       }
 

@@ -6,7 +6,7 @@
 class MigrateModule {
 
   constructor(mergedOptions, userOptions, defaults){
-    $                    = mergedOptions.plugins;
+    this.plugins         = mergedOptions.plugins;
     this.mergedOptions   = mergedOptions || {};
     this.userOptions     = userOptions   || {};
     this.defaults        = defaults      || {};
@@ -28,7 +28,7 @@ class MigrateModule {
     /**
      * migrate.manager must be a function
      */
-    if(this.mergedOptions.migrate){
+    if(this.mergedOptions.migrate && this.mergedOptions.migrate.manager){
       let manager = this.mergedOptions.migrate.optionsManager;
       try {
         manager(this.mergedOptions, this.userOptions, this.defaults);
@@ -45,7 +45,7 @@ class MigrateModule {
       prop        : 'modulesData',
       dotLocation : 'options',
       value       : this.mergedOptions.modulesData,
-      msg         : getMessage({
+      msg         : this.getMessage({
         type        : 'soonTo',
         newValue    : 'modules'
       })
@@ -58,7 +58,7 @@ class MigrateModule {
     let message = this.migrateMessages[args.type];
 
     for(let key in args){
-      message = message.replace('$' + key, $.chalk.red(args[key]) );
+      message = message.replace('$' + key, this.plugins.chalk.red(args[key]) );
     }
 
     return message;
@@ -70,7 +70,7 @@ class MigrateModule {
       this.warnedAbout[ msg ] = true;
       this.migrateWarnings.push( msg );
       if ( console && console.warn ) {
-        console.warn( utilsModule.getBaseBuildName() + $.chalk.yellow( "Migrate warning: property " + $.chalk.red(prop) + " of " + $.chalk.red(dotLocation) + " is deprecated " + msg) );
+        console.warn( utilsModule.getBaseBuildName() + this.plugins.chalk.yellow( "Migrate warning: property " + this.plugins.chalk.red(prop) + " of " + this.plugins.chalk.red(dotLocation) + " is deprecated " + msg) );
         if ( this.mergedOptions.migrate.trace && console.trace ) {
           console.trace();
         }

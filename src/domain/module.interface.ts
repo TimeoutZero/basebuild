@@ -4,6 +4,7 @@ import { BasebuildModuleInitializer } from './module-initializer.interface';
 
 export interface BasebuildModule {
   uses?: string | Function;
-  useClass?: string | BasebuildModuleInitializer;
+  initializerClass?: string | BasebuildModuleInitializer;
+  initializerInstance: BasebuildModuleInitializer;
   settings: webpack.Configuration
 }

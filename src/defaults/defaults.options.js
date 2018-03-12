@@ -5,13 +5,18 @@ var nodePlugins = require('gulp-load-plugins')({
     '*',
     '!gulp',
     '!protractor',
-    '!mocha'
+    '!mocha',
+    '!babel',
+    '!babel-cli'
   ]
 });
 
 var _ = nodePlugins.lodash;
 const path = require('path'),
-  defaultsDeep = require('../merger.js').defaultsDeep;
+  defaultsDeep        = require('../merger.js').defaultsDeep,
+  generalWebpackRules = require('../defaults/webpack.defaults').rules;
+
+
 
 
 module.exports = function(){
@@ -42,7 +47,7 @@ module.exports = function(){
 
 
   defaultOptions.plugins = nodePlugins;
-  defaultOptions.modules = {};
+  defaultOptions.generalWebpackRules = {generalWebpackRules};
 
 
   // Common initial properties
@@ -74,9 +79,12 @@ module.exports = function(){
 
     unitTests: {
       defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
-      mochaOptions: '--ui "bdd" --colors true',
-      specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/,
-      settings: require('../unit-tests/unit-tests.initializer.js')
+      initializerClass: require('../unit-tests/unit-tests.initializer.js'),
+      variables: {
+        mochaOptions: '--ui "bdd" --colors true',
+        specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/
+      },
+      settings: {}
     }
   };
 
