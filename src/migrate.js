@@ -29,7 +29,7 @@ class MigrateModule {
      * migrate.manager must be a function
      */
     if(this.mergedOptions.migrate && this.mergedOptions.migrate.manager){
-      let manager = this.mergedOptions.migrate.optionsManager;
+      let manager = this.mergedOptions.migrate.manager;
       try {
         manager(this.mergedOptions, this.userOptions, this.defaults);
       } catch (err){
@@ -50,6 +50,8 @@ class MigrateModule {
         newValue    : 'modules'
       })
     });
+
+    // TODO deprecate "uses"
   }
 
 
