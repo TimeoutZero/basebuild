@@ -7,7 +7,9 @@ var nodePlugins = require('gulp-load-plugins')({
     '!protractor',
     '!mocha',
     '!babel',
-    '!babel-cli'
+    '!babel-*',
+    '!babel-cli',
+    '!*-loader'
   ]
 });
 

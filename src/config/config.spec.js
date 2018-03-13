@@ -101,7 +101,7 @@ describe('Config Module', function(){
             };
 
             moduleInstance = new ConfigModule(userOptionsWithModulesUsingClasses, commonUserDefaults);
-            moduleInstance.setup();
+            moduleInstance.buildExternalModulesSettings(moduleInstance.userOptions);
             sinon.stub(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance, 'buildSettings');
           });
 
@@ -109,8 +109,9 @@ describe('Config Module', function(){
             moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.restore();
           });
 
-          it("runs the buildSettings method for every new module", function(){
+          it("runs the buildSettings method for every new module", function(done){
             assert.isTrue(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.calledOnce);
+            done();
           });
         })
 

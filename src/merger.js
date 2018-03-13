@@ -9,4 +9,4 @@ const defaultsDeep   = _.partialRight(_.merge, function recursiveDefaults () {
 
 module.exports = {
   defaultsDeep: defaultsDeep
-}
+};
