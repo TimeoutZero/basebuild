@@ -49,7 +49,7 @@ module.exports = function(){
 
 
   defaultOptions.plugins = nodePlugins;
-  defaultOptions.generalWebpackRules = {generalWebpackRules};
+  defaultOptions.webpackUtils = {generalWebpackRules};
 
 
   // Common initial properties
@@ -81,7 +81,7 @@ module.exports = function(){
 
     unitTests: {
       defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
-      initializerClass: require('../unit-tests/unit-tests.initializer.js'),
+      initializerClass: path.resolve('../unit-tests/unit-tests.initializer.js'),
       variables: {
         mochaOptions: '--ui "bdd" --colors true',
         specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/
@@ -89,7 +89,6 @@ module.exports = function(){
       settings: {}
     }
   };
-
 
 
   return defaultOptions;

@@ -28,29 +28,38 @@ describe('Config Module', function(){
         date  : new Date()
       }
     };
-    const newModuleUsingClass = {
-      initializerClass: class NewModuleUsingClass {
-        buildSettings(){
 
-        }
+    class NewModuleUsingClass {
+      buildSettings(){
+        return {
+          entry: '[name]-2.js'
+        };
+      }
 
-        registerTask(){
+      registerTask(){
 
-        }
       }
     };
 
-    const newModuleUsingClass2 = {
-      initializerClass: class NewModuleUsingClass2 {
-        buildSettings(){
+    class NewModuleUsingClass2 {
+      buildSettings(){
+        return {
+          entry: '[name]-2.js'
+        };
+      }
 
-        }
+      registerTask(){
 
-        registerTask(){
-
-        }
       }
     }
+
+    const newModuleUsingClass = {
+      initializerClass: NewModuleUsingClass
+    };
+
+    const newModuleUsingClass2 = {
+      initializerClass: NewModuleUsingClass2
+    };
 
 
     /*
@@ -101,16 +110,12 @@ describe('Config Module', function(){
             };
 
             moduleInstance = new ConfigModule(userOptionsWithModulesUsingClasses, commonUserDefaults);
-            moduleInstance.buildExternalModulesSettings(moduleInstance.userOptions);
-            sinon.stub(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance, 'buildSettings');
-          });
-
-          afterEach(function(){
-            moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.restore();
+            moduleInstance.buildModulesSettings(moduleInstance.userOptions);
           });
 
           it("runs the buildSettings method for every new module", function(done){
-            assert.isTrue(moduleInstance.userOptions.modules.newModuleUsingClass.initializerInstance.buildSettings.calledOnce);
+            const expectedSettings = new NewModuleUsingClass().buildSettings();
+            assert.deepEqual(moduleInstance.userOptions.modules.newModuleUsingClass.settings, expectedSettings);
             done();
           });
         })

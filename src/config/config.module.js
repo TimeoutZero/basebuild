@@ -45,7 +45,12 @@ class ConfigModule {
    */
    setup(userOptions = this.userOptions) {
     userOptions         = userOptions;
-    this.buildExternalModulesSettings(userOptions.modules);
+
+    // Internal modules
+    this.buildModulesSettings(this.defaults.modules);
+
+    // External modules
+    this.buildModulesSettings(userOptions.modules);
 
     this.finalOptions   = this.mergeWithDefaultOptions(this.finalOptions);
 
@@ -68,7 +73,7 @@ class ConfigModule {
   }
 
 
-  buildExternalModulesSettings(modules = {}){
+  buildModulesSettings(modules = {}){
     for(let key in modules){
       let basebuildModule  = modules[key];
 
@@ -81,7 +86,10 @@ class ConfigModule {
         }
 
         basebuildModule.initializerInstance = new basebuildModule.initializerClass();
-        basebuildModule.settings = basebuildModule.initializerInstance.buildSettings();
+        basebuildModule.settings = basebuildModule.initializerInstance.buildSettings({
+          defaults: this.defaults,
+          moduleSettings: basebuildModule.settings
+        });
 
       }
 
