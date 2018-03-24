@@ -80,7 +80,8 @@ class ConfigModule {
 
       // Initialing by a class
       if(basebuildModule.initializerClass){
-        let initializerClass = basebuildModule.initializerClass;
+        let initializerClass        = basebuildModule.initializerClass;
+        let basebuildModuleDefaults = undefined;
 
         if(_.isString(basebuildModule.initializerClass)){
           let cwd              = this.userOptions.cwd || this.defaults.cwd || process.cwd();
@@ -88,10 +89,23 @@ class ConfigModule {
           initializerClass = require(initializerPath);
         }
 
+        if(bbDefaults[])
+
         basebuildModule.initializerInstance = new initializerClass();
+        bbBuildSettingsParams    = {
+          /**
+           * @description {Object} addOnDefaults Default object of settings provided by an basebuild add-on like "basebuild-angular"
+           */
+          addOnDefaults: this.defaults,
+          defaults: bbDefaults,
+          moduleDefauls: this.defaults[key] || bbDefaults[key],
+          isDefaultAddOnModule: !_.isUndefined(this.defaults[key]),
+          isDefaultBasebuildModule: !_.isUndefined(bbDefaults[key])
+        };
+
         basebuildModule.settings = basebuildModule.initializerInstance.buildSettings({
-          basebuildDefaults: this.defaults,
-          moduleSettings: basebuildModule.settings
+          basebuild: bbBuildSettingsParams,
+          preDefinedModuleSettings: basebuildModule.settings
         });
 
       }
