@@ -8,6 +8,7 @@ const rootPath       = '..';
 const bbDefaults     = require(`${rootPath}/defaults/defaults.options`)(),
       chalk          = require('chalk'),
       _              = require('lodash'),
+      path           = require('path'),
       MigrateModule  = require(`${rootPath}/migrate.js`);
       // defaultsDeep   = require(`${rootPath}/merger.js`).defaultsDeep;
 
@@ -82,12 +83,14 @@ class ConfigModule {
         let initializerClass = basebuildModule.initializerClass;
 
         if(_.isString(basebuildModule.initializerClass)){
-          initializerClass = require(basebuildModule.initializerClass);
+          let cwd              = this.userOptions.cwd || this.defaults.cwd || process.cwd();
+          let initializerPath  = path.resolve(cwd, basebuildModule.initializerClass);
+          initializerClass = require(initializerPath);
         }
 
-        basebuildModule.initializerInstance = new basebuildModule.initializerClass();
+        basebuildModule.initializerInstance = new initializerClass();
         basebuildModule.settings = basebuildModule.initializerInstance.buildSettings({
-          defaults: this.defaults,
+          basebuildDefaults: this.defaults,
           moduleSettings: basebuildModule.settings
         });
 

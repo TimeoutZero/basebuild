@@ -26,7 +26,7 @@ module.exports = function() {
   }
 
   function setupCoverage () {
-    return gulp.src(['./src/**/*.js', '!./src/**/*.spec.js'])
+    return gulp.src(['./src/**/*.js', '!./src/**/*.spec.js', '!./src/**/*.mock.js'])
       .pipe(istanbul())
       .pipe(istanbul.hookRequire()).on('error', errorHandler('Coverage'));
   }

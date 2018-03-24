@@ -31,7 +31,9 @@ module.exports = function(){
   var defaultOptions = {
 
     // Source folder, where source code is present.
-    src: 'src'
+    src: 'src',
+
+    cwd: process.cwd()
   };
 
   /*

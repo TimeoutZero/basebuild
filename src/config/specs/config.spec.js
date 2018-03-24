@@ -5,8 +5,8 @@ describe('Config Module', function(){
     /*
      * Global Variables
     */
-    let rootPath      = "..";
-    let srcPath       = `./`;
+    let rootPath      = "../..";
+    let srcPath       = `../`;
     // let bbNodeModules = "#{rootPath}/node_modules";
 
     /*
@@ -15,6 +15,8 @@ describe('Config Module', function(){
     let defaultOptions = require(`${rootPath}/defaults/defaults.options`)();
     let ConfigModule   = require(`${srcPath}/config.module.js`);
     const _            = require('lodash');
+    const newModuleInitializerByPath = require('./newModuleInitializerByPath.mock');
+    const path = require('path');
 
     const sinon  = require('sinon');
     const chai   = require('chai');
@@ -100,7 +102,7 @@ describe('Config Module', function(){
 
     describe("When setups the basebuild", function(){
       describe("and user has added new modules", function(){
-        describe("using classes", function(){
+        describe("using defined classes as initializers", function(){
           let moduleInstance = null;
 
           beforeEach(function () {
@@ -110,7 +112,7 @@ describe('Config Module', function(){
             };
 
             moduleInstance = new ConfigModule(userOptionsWithModulesUsingClasses, commonUserDefaults);
-            moduleInstance.buildModulesSettings(moduleInstance.userOptions);
+            moduleInstance.buildModulesSettings(moduleInstance.userOptions.modules);
           });
 
           it("runs the buildSettings method for every new module", function(done){
@@ -120,6 +122,57 @@ describe('Config Module', function(){
           });
         })
 
+
+        describe("using string paths as initializers", function(){
+
+          let moduleInstance = null;
+
+            beforeEach(function () {
+
+              const userOptionsWithModulesUsingClassesByPath = {
+                modules: {
+                  newModuleInitializerByPath: {
+                    initializerClass: "src/config/specs/newModuleInitializerByPath.mock.js"
+                  }
+                }
+              };
+
+              moduleInstance = new ConfigModule(userOptionsWithModulesUsingClassesByPath, commonUserDefaults);
+              moduleInstance.buildModulesSettings(moduleInstance.userOptions.modules);
+            });
+
+            it("runs the buildSettings method for every new module", function(done){
+              const expectedSettings = new newModuleInitializerByPath().buildSettings();
+              assert.deepEqual(moduleInstance.userOptions.modules.newModuleInitializerByPath.settings, expectedSettings);
+              done();
+            });
+
+
+          describe("and changing the current working directory", function(){
+            let moduleInstance = null;
+
+            beforeEach(function () {
+              let defaults = _.clone(commonUserDefaults);
+              defaults.cwd = path.resolve(__dirname);
+              const userOptionsWithModulesUsingClassesByPath = {
+                modules: {
+                  newModuleInitializerByPath: {
+                    initializerClass: "./newModuleInitializerByPath.mock.js"
+                  }
+                }
+              };
+
+              moduleInstance = new ConfigModule(userOptionsWithModulesUsingClassesByPath, defaults);
+              moduleInstance.buildModulesSettings(moduleInstance.userOptions.modules);
+            });
+
+            it("runs the buildSettings method for every new module", function(done){
+              const expectedSettings = new newModuleInitializerByPath().buildSettings();
+              assert.deepEqual(moduleInstance.userOptions.modules.newModuleInitializerByPath.settings, expectedSettings);
+              done();
+            });
+          });
+        });
 
       })
     });
