@@ -9,7 +9,7 @@ let options = {
     // },
 
     unitTests: {
-      webpackConfig: {
+      settings: {
         target: 'web'
       }
     }
@@ -18,7 +18,7 @@ let options = {
 
 if(gutil.env.prod){
   options.modules.gulp.uses  = 'gulp';
-  basebuildMainFile          = 'basebuild-component';
+  basebuildMainFile          = 'basebuild';
 }
 
 require(basebuildMainFile)(options);

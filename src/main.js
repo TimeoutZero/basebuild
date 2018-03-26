@@ -9,7 +9,7 @@ const gutil          = require('gulp-util');
 const packageJSON    = require('../package.json');
 
 
-var basebuildMainScript = function(options, defaults){
+var basebuildMainScript = function(options, addOnDefaults){
 
   /*
     ==========================
@@ -31,14 +31,14 @@ var basebuildMainScript = function(options, defaults){
   /**
    * Config phase
    */
-  let configModule   = new require('./config.js')(options, defaults);
-  options            = configModule.options;
+  let configModule   = new require('./config.js')(options, addOnDefaults);
+  options            = configModule.finalOptions;
   defaults           = options.defaults;
 
   /**
    * Utils
    */
-  let bbUtils        = require('./utils.js')(options);
+  let bbUtils        = require('./utils.js')(finalOptions);
   let baseBuildName  = bbUtils.getBaseBuildName();
 
   /*
@@ -46,18 +46,22 @@ var basebuildMainScript = function(options, defaults){
     Read gulp files
     ==========================
   */
-  for(let key in options.modules){
-    let value      = options.modules[key].uses;
+  for(let key in finalOptions.modules){
+    let value      = finalOptions.modules[key].uses;
     let category   = chalk.green(' external ');
     let useMode    = '';
 
-    !options.modules[key] && (options.modules[key] = {});
-    let bbModule = options.modules[key];
+    !finalOptions.modules[key] && (finalOptions.modules[key] = {});
+    let bbModule = finalOptions.modules[key];
 
-    !bbModule.notStart ? (useMode = 'required') : (useMode = 'using');
+    // New modules which "active" property is not defined will be actives by default
+    bbModule.active = bbModule.active !== false;
+
+    !bbModule.suppressTaskRegisterOnStart ? (useMode = 'requiring tasks') : (useMode = 'using');
     bbModule.requireName = value;
+    let isDefaultModule = defaults.modules[key] && value === defaults.modules[key].defaultInitializerClassPath && !bbModule.isExternal;
 
-    if(defaults.modules[key] && value === defaults.modules[key].defaultValue && !bbModule.isExternal){
+    if(isDefaultModule){
       category = chalk.cyan(' built-in ');
     } else {
       bbModule.isDefault  = false;
@@ -65,12 +69,26 @@ var basebuildMainScript = function(options, defaults){
       bbModule.requireName = process.cwd() + "/" + value;
     }
 
-    if(!bbModule.notStart && bbModule.isEnabled  !== false){
-      let moduleFunction = require( bbModule.requireName );
-      _.isFunction(moduleFunction) && moduleFunction(options);
+    if(bbModule.active){
+      if(!bbModule.suppressTaskRegisterOnStart){
+        let moduleFunction = require( bbModule.requireName );
+        _.isFunction(moduleFunction) && moduleFunction(finalOptions);
+
+        if(bbModule.initializerInstance){
+          bbModule.initializerInstance.registerTasks()
+        }
+      }
+
+      if(!bbModule.suppressLogOnRegisterTasks){
+        let initializerPath = '';
+        if(_.isString(bbModule.initializerClass)){
+          initializerPath = `as ${bbModule.initializerClass}`;
+        }
+
+        console.log( chalk.white( baseBuildName ) + useMode + category + chalk.magenta(key) +  `module ${chalk.magenta(initializerPath)}` );
+      }
     }
 
-    !bbModule.notLogOnStart && bbModule.isEnabled  !== false && console.log( chalk.white( baseBuildName ) + useMode + category + chalk.magenta(key) + ' module as ' + chalk.magenta(value) );
   }
 
   console.log('\n');

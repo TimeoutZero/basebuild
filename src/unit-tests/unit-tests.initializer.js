@@ -3,20 +3,19 @@
  * Imports
  */
 const path = require("path");
-const generalWebpackRules = require('../defaults/webpack.defaults').rules;
 
 /**
  * Module class
  */
 module.exports = class BasebuildUnitTestsInitializerModule {
 
-  buildSettings(defaults) {
+  buildSettings(params) {
     return  {
       module: {
         rules: [
-          generalWebpackRules.javascript,
-          generalWebpackRules.coffeescript,
-          generalWebpackRules.typescript
+          params.basebuild.defaults.webpackUtils.generalWebpackRules.javascript,
+          params.basebuild.defaults.webpackUtils.generalWebpackRules.coffeescript,
+          params.basebuild.defaults.webpackUtils.generalWebpackRules.typescript
         ]
       },
 

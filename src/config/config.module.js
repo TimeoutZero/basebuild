@@ -47,12 +47,16 @@ class ConfigModule {
    setup(userOptions = this.userOptions) {
     userOptions         = userOptions;
 
-    // Internal modules
+    // Basebuild modules
+    this.buildModulesSettings(bbDefaults.modules);
+
+    // addOn modules
     this.buildModulesSettings(this.defaults.modules);
 
     // External modules
     this.buildModulesSettings(userOptions.modules);
 
+    // Merge all options (including add on and user options)
     this.finalOptions   = this.mergeWithDefaultOptions(this.finalOptions);
 
     // Set default options in global options to never require ./defaults.js more than once
@@ -70,7 +74,7 @@ class ConfigModule {
    * @param  {Object} options merged with default options
    */
   mergeWithDefaultOptions(options) {
-    return defaultsDeep(options, this.defaults, bbDefaults);
+    return defaultsDeep(options, this.userOptions, this.defaults, bbDefaults);
   }
 
 
@@ -89,10 +93,8 @@ class ConfigModule {
           initializerClass = require(initializerPath);
         }
 
-        if(bbDefaults[])
-
         basebuildModule.initializerInstance = new initializerClass();
-        bbBuildSettingsParams    = {
+        let bbBuildSettingsParams    = {
           /**
            * @description {Object} addOnDefaults Default object of settings provided by an basebuild add-on like "basebuild-angular"
            */

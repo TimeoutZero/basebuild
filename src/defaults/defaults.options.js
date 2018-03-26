@@ -82,7 +82,7 @@ module.exports = function(){
   defaultOptions.modules = {
 
     unitTests: {
-      defaultValue: path.resolve('../unit-tests/unit-tests.module.js'),
+      defaultInitializerClassPath: path.resolve('../unit-tests/unit-tests.module.js'),
       initializerClass: path.resolve('../unit-tests/unit-tests.initializer.js'),
       variables: {
         mochaOptions: '--ui "bdd" --colors true',
