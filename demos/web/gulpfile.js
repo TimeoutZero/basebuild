@@ -3,11 +3,12 @@ const gutil           = require('gulp-util');
 let basebuildMainFile = '../../src/main.js';
 
 let options = {
-  modules : {
-    // gulp : {
-    //   uses: '../demo-web/node_modules/gulp'
-    // },
 
+  gulpSettings: {
+    requireName: '../web/node_modules/gulp'
+  },
+
+  modules : {
     unitTests: {
       settings: {
         target: 'web'
@@ -17,8 +18,8 @@ let options = {
 };
 
 if(gutil.env.prod){
-  options.modules.gulp.uses  = 'gulp';
-  basebuildMainFile          = 'basebuild';
+  options.gulpSettings.requireName  = 'gulp';
+  basebuildMainFile                 = 'basebuild';
 }
 
 require(basebuildMainFile)(options);

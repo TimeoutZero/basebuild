@@ -67,6 +67,11 @@ module.exports = function(){
     trace: false
   };
 
+  defaultOptions.gulp = undefined;
+  defaultOptions.gulpSettings = {
+    requireName: 'gulp'
+  };
+
   /**
    * Basebuild works with modules.
    * There's a module for each feature,
@@ -82,8 +87,8 @@ module.exports = function(){
   defaultOptions.modules = {
 
     unitTests: {
-      defaultInitializerClassPath: path.resolve('../unit-tests/unit-tests.module.js'),
-      initializerClass: path.resolve('../unit-tests/unit-tests.initializer.js'),
+      defaultInitializerClassPath: path.resolve(__dirname, '../unit-tests/unit-tests.initializer.js'),
+      initializerClass: path.resolve(__dirname, '../unit-tests/unit-tests.initializer.js'),
       variables: {
         mochaOptions: '--ui "bdd" --colors true',
         specsRegexp: /.+\.spec\.(js|jsx|ts|tsx|coffee)$/

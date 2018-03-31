@@ -5,7 +5,11 @@ var nodePlugins = require('gulp-load-plugins')({
     '*',
     '!gulp',
     '!protractor',
-    '!mocha'
+    '!mocha',
+    '!babel',
+    '!babel-*',
+    '!babel-cli',
+    '!*-loader'
   ]
 });
 
@@ -15,14 +19,14 @@ var _ = nodePlugins.lodash;
 
 /**
  * Basebuild utils module, to work with common functions
- * @param {Object} options Merged options between default and user options
+ * @param {Object} finalOptions Merged options between default and user options
  */
-var UtilsModule = function(options) {
+var UtilsModule = function(finalOptions) {
 
   /*
    * Required resources
    */
-  var defaultOptions = options.defaultOptions;
+  var defaultOptions = finalOptions.defaults;
   var chalk          = nodePlugins.chalk;
 
   /*
@@ -35,14 +39,15 @@ var UtilsModule = function(options) {
    * @return {Function} module
    */
   function requireModule (key) {
-    var moduleName = options.modules[key].uses;
-    var data       = options.modules[key];
+    var moduleName = finalOptions.modules[key].uses;
+    var data       = finalOptions.modules[key];
     var module     = null;
 
     if(data.isDefault){
       module = require(moduleName);
     } else {
-      module = require(process.cwd() + '/' + moduleName);
+      let cwd = finalOptions.cwd || defaultOptions.cwd || process.cwd();
+      module = require(cwd + '/' + moduleName);
     }
 
     return module;

@@ -59,8 +59,14 @@ class ConfigModule {
     // Merge all options (including add on and user options)
     this.finalOptions   = this.mergeWithDefaultOptions(this.finalOptions);
 
+    if(!this.finalOptions.gulp){
+      this.finalOptions.gulp = require(this.finalOptions.gulpSettings.requireName);
+    }
+
     // Set default options in global options to never require ./defaults.js more than once
-    this.finalOptions.defaults = this.defaults;
+    this.finalOptions.addOnDefaults    = this.defaults;
+    this.finalOptions.basebuidDefaults = bbDefaults;
+    this.finalOptions.defaults         = defaultsDeep({}, this.finalOptions.addOnDefaults, this.finalOptions.basebuidDefaults);
 
     this.migrateModule = new MigrateModule(this.finalOptions, userOptions, this.defaults);
     this.migrateModule.migrate();

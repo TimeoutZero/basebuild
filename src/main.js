@@ -31,23 +31,26 @@ var basebuildMainScript = function(options, addOnDefaults){
   /**
    * Config phase
    */
-  let configModule   = new require('./config.js')(options, addOnDefaults);
-  options            = configModule.finalOptions;
-  defaults           = options.defaults;
+  let configModule   = require('./config/config.module.js');
+  configModule       = new configModule(options, addOnDefaults);
+  configModule.setup();
+
+  const finalOptions = configModule.finalOptions;
+  const defaults     = finalOptions.defaults;
 
   /**
    * Utils
    */
   let bbUtils        = require('./utils.js')(finalOptions);
   let baseBuildName  = bbUtils.getBaseBuildName();
-
+  const gulp         = finalOptions.gulp;
   /*
     ==========================
     Read gulp files
     ==========================
   */
   for(let key in finalOptions.modules){
-    let value      = finalOptions.modules[key].uses;
+    let value      = finalOptions.modules[key].initializerClass;
     let category   = chalk.green(' external ');
     let useMode    = '';
 
@@ -59,7 +62,9 @@ var basebuildMainScript = function(options, addOnDefaults){
 
     !bbModule.suppressTaskRegisterOnStart ? (useMode = 'requiring tasks') : (useMode = 'using');
     bbModule.requireName = value;
-    let isDefaultModule = defaults.modules[key] && value === defaults.modules[key].defaultInitializerClassPath && !bbModule.isExternal;
+
+    let forcesToBeExternal = bbModule.isExternal;
+    let isDefaultModule = defaults.modules[key] && value === defaults.modules[key].defaultInitializerClassPath && !forcesToBeExternal;
 
     if(isDefaultModule){
       category = chalk.cyan(' built-in ');
@@ -71,11 +76,19 @@ var basebuildMainScript = function(options, addOnDefaults){
 
     if(bbModule.active){
       if(!bbModule.suppressTaskRegisterOnStart){
-        let moduleFunction = require( bbModule.requireName );
-        _.isFunction(moduleFunction) && moduleFunction(finalOptions);
+        // let moduleFunction = require( bbModule.requireName );
+        // _.isFunction(moduleFunction) && moduleFunction(finalOptions);
 
         if(bbModule.initializerInstance){
-          bbModule.initializerInstance.registerTasks()
+          let bbRegisterTasksParams = {
+            basebuild: {
+              finalOptions: finalOptions
+            },
+            module: bbModule,
+            moduleSettings: bbModule.settings
+          };
+
+          bbModule.initializerInstance.registerTasks(finalOptions.gulp, bbRegisterTasksParams);
         }
       }
 
@@ -85,7 +98,7 @@ var basebuildMainScript = function(options, addOnDefaults){
           initializerPath = `as ${bbModule.initializerClass}`;
         }
 
-        console.log( chalk.white( baseBuildName ) + useMode + category + chalk.magenta(key) +  `module ${chalk.magenta(initializerPath)}` );
+        console.log( chalk.white( baseBuildName ) + useMode + category + chalk.magenta(key) +  ` module ${chalk.magenta(initializerPath)}` );
       }
     }
 
