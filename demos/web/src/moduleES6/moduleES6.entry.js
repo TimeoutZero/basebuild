@@ -1,4 +1,4 @@
-import 'file-loader?name=moduleES6/[name].[ext]!./bower.json'
+// import 'json-loader!file-loader?name=moduleES6/[name].[ext]!./bower.json'
 import dep1 from './dep1'
 import dep2 from './dep2'
 

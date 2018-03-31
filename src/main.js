@@ -67,7 +67,7 @@ var basebuildMainScript = function(options, addOnDefaults){
     let isDefaultModule = defaults.modules[key] && value === defaults.modules[key].defaultInitializerClassPath && !forcesToBeExternal;
 
     if(isDefaultModule){
-      category = chalk.cyan(' built-in ');
+      category = chalk.cyan('built-in');
     } else {
       bbModule.isDefault  = false;
       bbModule.isExternal = true;
@@ -98,7 +98,15 @@ var basebuildMainScript = function(options, addOnDefaults){
           initializerPath = `as ${bbModule.initializerClass}`;
         }
 
-        console.log( chalk.white( baseBuildName ) + useMode + category + chalk.magenta(key) +  ` module ${chalk.magenta(initializerPath)}` );
+        const registerLogMessage = [
+          chalk.white( baseBuildName ),
+          useMode,
+          category,
+          chalk.magenta(key),
+          `module ${chalk.magenta(initializerPath)}`
+        ].join(' ');
+
+        console.log( registerLogMessage );
       }
     }
 

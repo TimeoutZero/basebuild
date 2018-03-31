@@ -4,9 +4,7 @@ let basebuildMainFile = '../../src/main.js';
 
 let options = {
 
-  gulpSettings: {
-    requireName: '../web/node_modules/gulp'
-  },
+  gulp: require('gulp'),
 
   modules : {
     unitTests: {
